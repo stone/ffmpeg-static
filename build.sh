@@ -7,13 +7,24 @@ cd `dirname $0`
 ENV_ROOT=`pwd`
 . ./env.source
 
-rm -rf "$BUILD_DIR" "$TARGET_DIR"
+if [ -d $BUILD_DIR ]; then
+    echo "*** STOP"
+    echo "Remove $BUILD_DIR first..."
+    exit 1
+fi
+
+if [ -d $TARGET_DIR ]; then
+    echo "*** STOP"
+    echo "Remove $TARGET_DIR first.."
+    exit 1
+fi
+
 mkdir -p "$BUILD_DIR" "$TARGET_DIR"
 
 # NOTE: this is a fetchurl parameter, nothing to do with the current script
 #export TARGET_DIR_DIR="$BUILD_DIR"
 
-echo "#### FFmpeg static build, by STVS SA ####"
+echo "#### FFmpeg static build, by STVS SA / stone ####"
 cd $BUILD_DIR
 ../fetchurl "http://www.tortall.net/projects/yasm/releases/yasm-1.0.1.tar.gz"
 ../fetchurl "http://www.imagemagick.org/download/delegates/zlib-1.2.5.tar.bz2"
