@@ -62,19 +62,19 @@ mkdir -p "$BUILD_DIR" "$TARGET_DIR"
 
 echo "#### FFmpeg static build, by STVS SA / stone ####"
 cd $BUILD_DIR
-../fetchurl "http://www.tortall.net/projects/yasm/releases/yasm-1.0.1.tar.gz"
+../fetchurl "http://www.tortall.net/projects/yasm/releases/yasm-1.2.0.tar.gz"
 ../fetchurl "http://www.imagemagick.org/download/delegates/zlib-1.2.5.tar.bz2"
-../fetchurl "http://www.bzip.org/1.0.5/bzip2-1.0.5.tar.gz"
+../fetchurl "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz"
 ../fetchurl "http://distfiles.macports.org/libpng/libpng-1.2.44.tar.bz2"
-../fetchurl "http://downloads.xiph.org/releases/ogg/libogg-1.2.0.tar.gz"
-../fetchurl "http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.1.tar.bz2"
+../fetchurl "http://downloads.xiph.org/releases/ogg/libogg-1.3.0.tar.gz"
+../fetchurl "http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.bz2"
 ../fetchurl "http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2"
 ../fetchurl "http://webm.googlecode.com/files/libvpx-v0.9.7-p1.tar.bz2"
 ../fetchurl "http://downloads.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.bz2?use_mirror=auto"
-../fetchurl "http://ftp.videolan.org/pub/x264/snapshots/x264-snapshot-20111025-2245-stable.tar.bz2"
-../fetchurl "http://downloads.xvid.org/downloads/xvidcore-1.2.2.tar.bz2"
-../fetchurl "http://downloads.sourceforge.net/project/lame/lame/3.98.4/lame-3.98.4.tar.gz?use_mirror=auto"
-../fetchurl "http://www.ffmpeg.org/releases/ffmpeg-0.8.tar.gz"
+../fetchurl "http://ftp.videolan.org/pub/x264/snapshots/x264-snapshot-20111108-2245-stable.tar.bz2"
+../fetchurl "http://downloads.xvid.org/downloads/xvidcore-1.3.2.tar.gz"
+../fetchurl "http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.1.tar.gz?use_mirror=auto"
+../fetchurl "http://www.ffmpeg.org/releases/ffmpeg-0.8.6.tar.gz"
 
 
 start_time=`date +%s`
