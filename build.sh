@@ -80,7 +80,7 @@ cd $BUILD_DIR
 start_time=`date +%s`
 
 echo "*** Building yasm ***"
-cd "$BUILD_DIR/yasm-1.0.1"
+cd "$BUILD_DIR/yasm-1.2.0"
 ./configure --prefix=$TARGET_DIR
 make -j $JOBS && make install
 
@@ -90,7 +90,7 @@ cd "$BUILD_DIR/zlib-1.2.5"
 make -j $JOBS && make install
 
 echo "*** Building bzip2 ***"
-cd "$BUILD_DIR/bzip2-1.0.5"
+cd "$BUILD_DIR/bzip2-1.0.6"
 make
 make install PREFIX=$TARGET_DIR
 
@@ -101,13 +101,13 @@ make -j $JOBS && make install
 
 # Ogg before vorbis
 echo "*** Building libogg ***"
-cd "$BUILD_DIR/libogg-1.2.0"
+cd "$BUILD_DIR/libogg-1.3.0"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
 # Vorbis before theora
 echo "*** Building libvorbis ***"
-cd "$BUILD_DIR/libvorbis-1.3.1"
+cd "$BUILD_DIR/libvorbis-1.3.2"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -129,7 +129,7 @@ sed -i -e "s|^char \*strcasestr.*|//\0|" common/mp4v2/mpeg4ip.h
 make -j $JOBS && make install
 
 echo "*** Building x264 ***"
-cd "$BUILD_DIR/x264-snapshot-20111025-2245-stable"
+cd "$BUILD_DIR/x264-snapshot-20111108-2245-stable"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -141,7 +141,7 @@ make -j $JOBS && make install
 #rm $TARGET_DIR/lib/libxvidcore.so.*
 
 echo "*** Building lame ***"
-cd "$BUILD_DIR/lame-3.98.4"
+cd "$BUILD_DIR/lame-3.99.1"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -151,7 +151,7 @@ rm -f "$TARGET_DIR/lib/*.so"
 
 # FFMpeg
 echo "*** Building FFmpeg ***"
-cd "$BUILD_DIR/ffmpeg-0.8"
+cd "$BUILD_DIR/ffmpeg-0.8.6"
 ./configure --prefix=${OUTPUT_DIR:-$TARGET_DIR} --extra-version=static --disable-debug --disable-shared --enable-static --extra-cflags=--static --disable-ffplay --disable-ffserver --disable-doc --enable-gpl --enable-pthreads --enable-postproc --enable-gray --enable-runtime-cpudetect --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-bzlib --enable-zlib --enable-nonfree --enable-version3 --enable-libvpx --disable-devices
 make -j $JOBS && make install
 
