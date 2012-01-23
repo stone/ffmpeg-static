@@ -70,11 +70,11 @@ cd $BUILD_DIR
 ../fetchurl "http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.bz2"
 ../fetchurl "http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2"
 ../fetchurl "http://webm.googlecode.com/files/libvpx-v0.9.7-p1.tar.bz2"
-../fetchurl "http://downloads.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.bz2?use_mirror=auto"
-../fetchurl "http://ftp.videolan.org/pub/x264/snapshots/x264-snapshot-20111108-2245-stable.tar.bz2"
+../fetchurl "http://downloads.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.gz"
+../fetchurl "http://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20120111-2245.tar.bz2"
 ../fetchurl "http://downloads.xvid.org/downloads/xvidcore-1.3.2.tar.gz"
-../fetchurl "http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.1.tar.gz?use_mirror=auto"
-../fetchurl "http://www.ffmpeg.org/releases/ffmpeg-0.8.6.tar.gz"
+../fetchurl "http://downloads.sourceforge.net/sourceforge/lame/lame-3.99.3.tar.gz"
+../fetchurl "http://www.ffmpeg.org/releases/ffmpeg-0.9.1.tar.gz"
 
 
 start_time=`date +%s`
@@ -129,7 +129,7 @@ sed -i -e "s|^char \*strcasestr.*|//\0|" common/mp4v2/mpeg4ip.h
 make -j $JOBS && make install
 
 echo "*** Building x264 ***"
-cd "$BUILD_DIR/x264-snapshot-20111108-2245-stable"
+cd "$BUILD_DIR/x264-snapshot-20120111-2245"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -141,7 +141,7 @@ make -j $JOBS && make install
 #rm $TARGET_DIR/lib/libxvidcore.so.*
 
 echo "*** Building lame ***"
-cd "$BUILD_DIR/lame-3.99.1"
+cd "$BUILD_DIR/lame-3.99.3"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -151,8 +151,8 @@ rm -f "$TARGET_DIR/lib/*.so"
 
 # FFMpeg
 echo "*** Building FFmpeg ***"
-cd "$BUILD_DIR/ffmpeg-0.8.6"
-./configure --prefix=${OUTPUT_DIR:-$TARGET_DIR} --extra-version=static --disable-debug --disable-shared --enable-static --extra-cflags=--static --disable-ffplay --disable-ffserver --disable-doc --enable-gpl --enable-pthreads --enable-postproc --enable-gray --enable-runtime-cpudetect --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-bzlib --enable-zlib --enable-nonfree --enable-version3 --enable-libvpx --disable-devices
+cd "$BUILD_DIR/ffmpeg-0.9.1"
+./configure --cc=clang --prefix=${OUTPUT_DIR:-$TARGET_DIR} --extra-version=static --disable-debug --disable-shared --enable-static --extra-cflags=--static --disable-ffplay --disable-ffserver --disable-doc --enable-gpl --enable-pthreads --enable-postproc --enable-gray --enable-runtime-cpudetect --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-bzlib --enable-zlib --enable-nonfree --enable-version3 --enable-libvpx --disable-devices
 make -j $JOBS && make install
 
 end_time=`date +%s`
