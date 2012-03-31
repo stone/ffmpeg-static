@@ -63,21 +63,18 @@ mkdir -p "$BUILD_DIR" "$TARGET_DIR"
 echo "#### FFmpeg static build, by STVS SA / stone ####"
 cd $BUILD_DIR
 ../fetchurl "http://www.tortall.net/projects/yasm/releases/yasm-1.2.0.tar.gz"
-../fetchurl "http://www.imagemagick.org/download/delegates/zlib-1.2.5.tar.bz2"
+../fetchurl "http://zlib.net/zlib-1.2.6.tar.bz2"
 ../fetchurl "http://www.bzip.org/1.0.6/bzip2-1.0.6.tar.gz"
-../fetchurl "http://distfiles.macports.org/libpng/libpng-1.2.44.tar.bz2"
+../fetchurl "ftp://ftp.simplesystems.org/pub/libpng/png/src/libpng-1.5.10.tar.gz"
 ../fetchurl "http://downloads.xiph.org/releases/ogg/libogg-1.3.0.tar.gz"
 ../fetchurl "http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.2.tar.bz2"
 ../fetchurl "http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2"
-../fetchurl "http://webm.googlecode.com/files/libvpx-v0.9.7-p1.tar.bz2"
-../fetchurl "http://downloads.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.gz"
-../fetchurl "http://download.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20120111-2245.tar.bz2"
-../fetchurl "http://downloads.xvid.org/downloads/xvidcore-1.3.2.tar.gz"
-../fetchurl "http://downloads.sourceforge.net/sourceforge/lame/lame-3.99.3.tar.gz"
-../fetchurl "http://www.ffmpeg.org/releases/ffmpeg-0.9.1.tar.gz"
-
-
-start_time=`date +%s`
+../fetchurl "http://webm.googlecode.com/files/libvpx-v1.0.0.tar.bz2"
+../fetchurl "http://downloads.sourceforge.net/project/faac/faac-src/faac-1.28/faac-1.28.tar.bz2?use_mirror=auto"
+../fetchurl "ftp://ftp.videolan.org/pub/videolan/x264/snapshots/x264-snapshot-20120201-2245.tar.bz2"
+../fetchurl "http://downloads.xvid.org/downloads/xvidcore-1.3.2.tar.bz2"
+../fetchurl "http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.4.tar.gz?use_mirror=auto"
+../fetchurl "http://www.ffmpeg.org/releases/ffmpeg-0.10.2.tar.gz"
 
 echo "*** Building yasm ***"
 cd "$BUILD_DIR/yasm-1.2.0"
@@ -85,17 +82,17 @@ cd "$BUILD_DIR/yasm-1.2.0"
 make -j $JOBS && make install
 
 echo "*** Building zlib ***"
-cd "$BUILD_DIR/zlib-1.2.5"
-./configure --prefix=$TARGET_DIR 
+cd "$BUILD_DIR/zlib-1.2.6"
+./configure --prefix=$TARGET_DIR --static
 make -j $JOBS && make install
 
 echo "*** Building bzip2 ***"
 cd "$BUILD_DIR/bzip2-1.0.6"
 make
-make install PREFIX=$TARGET_DIR
+make -j $JOBS install PREFIX=$TARGET_DIR
 
 echo "*** Building libpng ***"
-cd "$BUILD_DIR/libpng-1.2.44"
+cd "$BUILD_DIR/libpng-1.5.10"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -117,7 +114,7 @@ cd "$BUILD_DIR/libtheora-1.1.1"
 make -j $JOBS && make install
 
 echo "*** Building livpx ***"
-cd "$BUILD_DIR/libvpx-v0.9.7-p1"
+cd "$BUILD_DIR/libvpx-v1.0.0"
 ./configure --prefix=$TARGET_DIR --disable-shared
 make -j $JOBS && make install
 
@@ -129,7 +126,7 @@ sed -i -e "s|^char \*strcasestr.*|//\0|" common/mp4v2/mpeg4ip.h
 make -j $JOBS && make install
 
 echo "*** Building x264 ***"
-cd "$BUILD_DIR/x264-snapshot-20120111-2245"
+cd "$BUILD_DIR/x264-snapshot-20120201-2245"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -141,7 +138,7 @@ make -j $JOBS && make install
 #rm $TARGET_DIR/lib/libxvidcore.so.*
 
 echo "*** Building lame ***"
-cd "$BUILD_DIR/lame-3.99.3"
+cd "$BUILD_DIR/lame-3.99.4"
 ./configure --prefix=$TARGET_DIR --enable-static --disable-shared
 make -j $JOBS && make install
 
@@ -151,25 +148,7 @@ rm -f "$TARGET_DIR/lib/*.so"
 
 # FFMpeg
 echo "*** Building FFmpeg ***"
-cd "$BUILD_DIR/ffmpeg-0.9.1"
-if [[ `uname -v` =~ "Darwin Kernel Version 11" ]] ; then
-	./configure --cc=clang --prefix=${OUTPUT_DIR:-$TARGET_DIR} --extra-version=static --disable-debug --disable-shared --enable-static --extra-cflags=--static --disable-ffplay --disable-ffserver --disable-doc --enable-gpl --enable-pthreads --enable-postproc --enable-gray --enable-runtime-cpudetect --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-bzlib --enable-zlib --enable-nonfree --enable-version3 --enable-libvpx --disable-devices
-else
-	./configure --prefix=${OUTPUT_DIR:-$TARGET_DIR} --extra-version=static --disable-debug --disable-shared --enable-static --extra-cflags=--static --disable-ffplay --disable-ffserver --disable-doc --enable-gpl --enable-pthreads --enable-postproc --enable-gray --enable-runtime-cpudetect --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-bzlib --enable-zlib --enable-nonfree --enable-version3 --enable-libvpx --disable-devices
-fi
-make -j $JOBS && make install
-
-end_time=`date +%s`
-
-echo
-echo "*****************************************"
-echo "   Your \"static\" ffmpeg is now baked"
-echo "          target/bin/ffmpeg"
-echo "   execution time was `expr $end_time - $start_time` s."
-echo "*****************************************"
-echo
-ldd $TARGET_DIR/bin/ffmpeg
-echo
-echo "*****************************************"
-echo
+cd "$BUILD_DIR/ffmpeg-0.10.2"
+./configure --prefix=${OUTPUT_DIR:-$TARGET_DIR} --extra-version=static --disable-debug --disable-shared --enable-static --extra-cflags=--static --enable-cross-compile --arch=x86_64 --arch=i386 --target-os=`uname | awk '{print tolower($0)}'` --disable-ffplay --disable-ffserver --disable-doc --enable-gpl --enable-pthreads --enable-postproc --enable-gray --enable-runtime-cpudetect --enable-libfaac --enable-libmp3lame --enable-libtheora --enable-libvorbis --enable-libx264 --enable-libxvid --enable-bzlib --enable-zlib --enable-nonfree --enable-version3 --enable-libvpx --disable-devices --extra-libs=$TARGET_DIR/lib/libfaac.a --extra-libs=$TARGET_DIR/lib/libvorbis.a --extra-libs=$TARGET_DIR/lib/libxvidcore.a
+make -j 4 && make install
 
